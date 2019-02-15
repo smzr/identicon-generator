@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Identicon Generator</title><style>
+    html, body {
+        background-color: rgb(33, 33, 33);
+        color: rgb(238, 238, 238);
+        font-size: 12pt;
+    }
+    #container{
+        max-width: 360px;
+        margin: 24px auto auto;
+    }
+    #toolbar {
+        margin: 12px auto auto;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 360px;
+    }
+    #toolbar-right button {
+        margin-left: 12px;
+    }
+    button {
+        background-color: #007bff;
+        border: solid #007bff;
+        border-radius: .25rem;
+        padding: .375rem .75rem;
+        text-align: center;
+        display: inline-block;
+        color: rgb(238, 238, 238);
+        font-weight: bold;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    button:hover {
+        cursor: pointer;
+        background-color: #006cd8;
+        border: solid #006cd8;
+    }
+</style>
+</head>
+<body>
+<div id="container">
+    <canvas id="identicon" width="360" height="360" onclick="download()"></canvas>
+</div>
+<div id="toolbar">
+    <button onclick="generateImg()">Refresh</button>
+    <div id="toolbar-right">
+        <button onclick="refreshColor()">New color</button>
+        <button onclick="refreshShape()">New shape</button>
+    </div>
+</div>
+<script src="main.js"></script>
+</body>
+</html>
