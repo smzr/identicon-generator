@@ -2,25 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Identicon Generator</title><style>
+    <title>Identicon Generator</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+    <style>
     html, body {
         background-color: rgb(33, 33, 33);
         color: rgb(238, 238, 238);
+        font-family: 'Roboto', 'sans-serif';
         font-size: 12pt;
     }
     #container{
-        max-width: 360px;
         margin: 24px auto auto;
+        display: flex;
+        flex-direction: column;
     }
-    #toolbar {
-        margin: 12px auto auto;
+    .toolbar {
+        margin: 12px 0 0;
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        max-width: 360px;
+        min-width: 300px;
     }
-    #toolbar-right button {
+    .toolbar-right {
+        display: flex;
+    }
+    .toolbar-right button {
         margin-left: 12px;
     }
     button {
@@ -31,25 +38,54 @@
         text-align: center;
         display: inline-block;
         color: rgb(238, 238, 238);
-        font-weight: bold;
         transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        font-family: 'Roboto', 'sans-serif';
+        font-weight: bold;
+        font-size: 12pt;
     }
     button:hover {
         cursor: pointer;
         background-color: #006cd8;
         border: solid #006cd8;
     }
+    .slider {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 600px;
+        min-width: 300px;
+    }
+    .slider input{
+        width: 100%;
+    }
+    .slider label {
+        width: 100px;
+    }
+    #rowsCounter, #colsCounter {
+        color: grey;
+        margin-left: 6px;
+    }
 </style>
 </head>
 <body>
 <div id="container">
     <canvas id="identicon" width="360" height="360"></canvas>
-</div>
-<div id="toolbar">
-    <button onclick="generateImg()">Refresh</button>
-    <div id="toolbar-right">
-        <button onclick="refreshColor()">New color</button>
-        <button onclick="refreshShape()">New shape</button>
+    <div class="toolbar">
+        <button onclick="generateImg()">Refresh</button>
+        <div class="toolbar-right">
+            <button onclick="refreshColor()">New color</button>
+            <button onclick="refreshShape()">New shape</button>
+        </div>
+    </div>
+    <div class="slider">
+        <label for="cols">Columns:</label>
+        <input id="cols" type="range" min="1" max="100" step="1" value="5" onchange="updateLabels()" onmousemove="updateLabels()"/>
+        <p id="colsCounter"></p>
+    </div>
+    <div class="slider">
+        <label for="rows">Rows:</label>
+        <input id="rows" type="range" min="1" max="100" step="1" value="5" onchange="updateLabels()" onmousemove="updateLabels()"/>
+        <p id="rowsCounter"></p>
     </div>
 </div>
 <script src="main.js"></script>
