@@ -73,10 +73,6 @@ function draw() {
     }
 }
 
-function download() {
-    window.location = canvas.toDataURL("image/png");
-}
-
 function generateImg() {
     color = randomColor();
     generateShape();
