@@ -54,7 +54,6 @@ function new2DArr(cols, rows, value) {
     for (let x = 0; x < cols; x++) {
         arr[x] = Array(rows).fill(value);
     }
-    console.log(arr);
     return arr;
 }
 
