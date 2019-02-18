@@ -1,19 +1,6 @@
 const canvas = document.getElementById("identicon");
 const ctx = canvas.getContext('2d');
-const width = canvas.width;
-const height = canvas.height;
-const padding = height > width ? width / 10 : height / 10 ; // uses the smallest side to get padding
-const shapeWidth = width - (2 * padding); // width after padding is applied
-const shapeHeight = height - (2 * padding); // width after padding is applied
-let colsInput = document.getElementById("cols").value;
-let rowsInput = document.getElementById("rows").value;
-let cols = colsInput;
-let rows = rowsInput;
-let colWidth = Math.round(shapeWidth / cols);
-let rowWidth = Math.round(shapeHeight / rows);
-
-const container = document.getElementById("container");
-container.style.width = canvas.width+"px"; // set the width of container to width of canvas so that canvas is centered
+let width, height, cellSize, padding, cols, rows, grid, color, gridArr;
 
 function randomColor() {
     const goldenRatio = 0.618033988749895;
@@ -49,6 +36,10 @@ function HSVtoRGB(h, s, v) {
     };
 }
 
+function gcd(a, b) {
+    return (b === 0) ? a : gcd(b, a%b);
+}
+
 function new2DArr(cols, rows, value) {
     let arr = Array(cols);
     for (let x = 0; x < cols; x++) {
@@ -80,20 +71,36 @@ function draw() {
             else {
                 ctx.fillStyle = 'rgb(238, 238, 238)'
             }
-            ctx.fillRect((x * colWidth) + padding, (y * rowWidth) + padding, colWidth, rowWidth);
+            ctx.fillRect((x * cellSize) + padding, (y * cellSize) + padding, cellSize, cellSize);
         }
     }
 }
 
 function init() {
+    cols = +document.getElementById("cols").value;
+    rows = +document.getElementById("rows").value;
+    let gcdWin = gcd(window.innerWidth, window.innerHeight);
+    let arWin = (window.innerWidth/gcdWin)/(window.innerHeight/gcdWin);
+    let gcdGrid = gcd(cols, rows);
+    let arGrid = (cols/gcdGrid)/(rows/gcdGrid);
+
+    if (arGrid > arWin) {
+        canvas.width = window.innerWidth - 200;
+        padding = 40;
+        cellSize = Math.round((canvas.width - padding * 2) / cols);
+        canvas.height = (rows * cellSize) + padding * 2;
+        canvas.width = (cols * cellSize) + padding * 2;
+    } else {
+        canvas.height = window.innerHeight - 200;
+        padding = 40;
+        cellSize = Math.round((canvas.height - padding * 2) / rows);
+        canvas.height = (rows * cellSize) + padding * 2;
+        canvas.width = (cols * cellSize) + padding * 2;
+    }
+
+    document.getElementById('container').style.width = canvas.width + "px";
     ctx.fillStyle = 'rgb(238, 238, 238)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    colsInput = document.getElementById("cols").value;
-    rowsInput = document.getElementById("rows").value;
-    cols = colsInput;
-    rows = rowsInput;
-    colWidth = Math.round(shapeWidth / cols);
-    rowWidth = Math.round(shapeHeight / rows);
     grid = new2DArr(cols, rows, 0);
 }
 
@@ -118,7 +125,64 @@ function updateLabels() {
     document.getElementById('colsCounter').innerText = document.getElementById("cols").value;
 }
 
-let grid;
-let color;
+function generateSeed() {
+    gridArr = new2DArr(Math.round(cols / 2), rows, 0);
+    for (let x = 0; x < Math.round(cols / 2); x++) {
+        for (let y = 0; y < rows; y++) {
+            gridArr[x][y] = grid[x][y]
+        }
+    }
+    window.location = "https://smzr.github.io/identicon-generator/?seed="+JSON.stringify({cols, rows, cellSize, color, gridArr});
+}
+
+function loadSeed(seed) {
+    seed = JSON.parse(seed);
+    cols = seed.cols;
+    rows = seed.rows;
+    cellSize = seed.cellSize;
+    color = seed.color;
+    gridArr = seed.gridArr;
+
+    let gcdWin = gcd(window.innerWidth, window.innerHeight);
+    let arWin = (window.innerWidth/gcdWin)/(window.innerHeight/gcdWin);
+    let gcdGrid = gcd(cols, rows);
+    let arGrid = (cols/gcdGrid)/(rows/gcdGrid);
+
+    if (arGrid > arWin) {
+        canvas.width = window.innerWidth - 200;
+        padding = 40;
+        canvas.height = (rows * cellSize) + padding * 2;
+        canvas.width = (cols * cellSize) + padding * 2;
+    } else {
+        canvas.height = window.innerHeight - 200;
+        padding = 40;
+        canvas.height = (rows * cellSize) + padding * 2;
+        canvas.width = (cols * cellSize) + padding * 2;
+    }
+
+    document.getElementById('container').style.width = canvas.width + "px";
+    ctx.fillStyle = 'rgb(238, 238, 238)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    grid = new2DArr(cols, rows, 0);
+    for (let x = 0; x < Math.round(cols / 2); x++) {
+        for (let y = 0; y < rows; y++) {
+            grid[x][y] = gridArr[x][y]
+        }
+    }
+    for (let x = Math.round(cols / 2); x < cols; x++) {
+        for (let y = 0; y < rows; y++) {
+            grid[x][y] = grid[Math.round(cols / 2) - (x - Math.floor(cols / 2)) - 1][y]
+        }
+    }
+    draw();
+}
+
 updateLabels();
-generateImg();
+let url = new URL(window.location);
+let seed = url.searchParams.get('seed');
+if (seed) {
+    loadSeed(seed)
+} else {
+    generateImg();
+}

@@ -12,16 +12,18 @@
         font-size: 12pt;
     }
     #container{
-        margin: 24px auto auto;
+        margin: 24px auto;
         display: flex;
         flex-direction: column;
     }
-    .toolbar {
-        margin: 12px 0 0;
+    #toolbar {
+        margin: auto;
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        padding: 0px 24px;
+        max-width: 600px;
         min-width: 300px;
     }
     .toolbar-right {
@@ -52,6 +54,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin: auto;
         max-width: 600px;
         min-width: 300px;
     }
@@ -68,13 +71,15 @@
 </style>
 </head>
 <body>
-<div id="container">
-    <canvas id="identicon" width="360" height="360"></canvas>
-    <div class="toolbar">
+    <div id="container">
+        <canvas id="identicon" width="360" height="360"></canvas>
+    </div>
+    <div id="toolbar">
         <button onclick="generateImg()">Refresh</button>
         <div class="toolbar-right">
             <button onclick="refreshColor()">New color</button>
             <button onclick="refreshShape()">New shape</button>
+            <button onclick="generateSeed()">Seed</button>
         </div>
     </div>
     <div class="slider">
@@ -87,7 +92,6 @@
         <input id="rows" type="range" min="1" max="100" step="1" value="5" onchange="updateLabels()" onmousemove="updateLabels()"/>
         <p id="rowsCounter"></p>
     </div>
-</div>
-<script src="main.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
