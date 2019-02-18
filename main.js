@@ -1,6 +1,11 @@
 const canvas = document.getElementById("identicon");
 const ctx = canvas.getContext('2d');
-let width, height, cellSize, padding, cols, rows, grid, color, gridArr;
+let cellSize, padding, cols, rows, grid, color, gridArr;
+let arlock = document.getElementById("1:1ratio").checked;
+
+function arlockToggle() {
+    arlock = document.getElementById("1:1ratio").checked;
+}
 
 function randomColor() {
     const goldenRatio = 0.618033988749895;
@@ -121,18 +126,26 @@ function refreshShape() {
 }
 
 function updateLabels() {
-    document.getElementById('rowsCounter').innerText = document.getElementById("rows").value;
     document.getElementById('colsCounter').innerText = document.getElementById("cols").value;
+    if (arlock) {
+        document.getElementById("rows").disabled = true;
+        document.getElementById("rows").value = document.getElementById("cols").value;
+    } else {
+        document.getElementById("rows").disabled = false;
+    }
+    document.getElementById('rowsCounter').innerText = document.getElementById("rows").value;
 }
 
 function generateSeed() {
-    gridArr = new2DArr(Math.round(cols / 2), rows, 0);
+    /*gridArr = new2DArr(Math.round(cols / 2), rows, 0);
     for (let x = 0; x < Math.round(cols / 2); x++) {
         for (let y = 0; y < rows; y++) {
             gridArr[x][y] = grid[x][y]
         }
     }
-    window.location = "https://smzr.github.io/identicon-generator/?seed="+JSON.stringify({cols, rows, cellSize, color, gridArr});
+    window.location = "https://smzr.github.io/identicon-generator/?seed="+JSON.stringify({cols, rows, cellSize, color, gridArr});*/
+    let cvSave = canvas.toDataURL("image/png");
+    console.log(cvSave)
 }
 
 function loadSeed(seed) {

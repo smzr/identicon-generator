@@ -16,15 +16,19 @@
         display: flex;
         flex-direction: column;
     }
-    #toolbar {
+    #options {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
         margin: auto;
+        max-width: 600px;
+        min-width: 300px;
+    }
+    #toolbar {
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        padding: 0px 24px;
-        max-width: 600px;
-        min-width: 300px;
     }
     .toolbar-right {
         display: flex;
@@ -54,7 +58,6 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin: auto;
         max-width: 600px;
         min-width: 300px;
     }
@@ -74,23 +77,29 @@
     <div id="container">
         <canvas id="identicon" width="360" height="360"></canvas>
     </div>
-    <div id="toolbar">
-        <button onclick="generateImg()">Refresh</button>
-        <div class="toolbar-right">
-            <button onclick="refreshColor()">New color</button>
-            <button onclick="refreshShape()">New shape</button>
-            <button onclick="generateSeed()">Seed</button>
+    <div id="options">
+        <div id="toolbar">
+            <button onclick="generateImg()">Refresh</button>
+            <div class="toolbar-right">
+                <button onclick="refreshColor()">New color</button>
+                <button onclick="refreshShape()">New shape</button>
+                <button onclick="generateSeed()">Seed</button>
+            </div>
         </div>
-    </div>
-    <div class="slider">
-        <label for="cols">Columns:</label>
-        <input id="cols" type="range" min="1" max="100" step="1" value="5" onchange="updateLabels()" onmousemove="updateLabels()"/>
-        <p id="colsCounter"></p>
-    </div>
-    <div class="slider">
-        <label for="rows">Rows:</label>
-        <input id="rows" type="range" min="1" max="100" step="1" value="5" onchange="updateLabels()" onmousemove="updateLabels()"/>
-        <p id="rowsCounter"></p>
+        <div class="slider">
+            <label for="cols">Columns:</label>
+            <input id="cols" type="range" min="1" max="100" step="1" value="5" onchange="updateLabels()" onmousemove="updateLabels()"/>
+            <p id="colsCounter"></p>
+        </div>
+        <div class="slider">
+            <label for="rows">Rows:</label>
+            <input id="rows" type="range" min="1" max="100" step="1" value="5" onchange="updateLabels()" onmousemove="updateLabels()"/>
+            <p id="rowsCounter"></p>
+        </div>
+        <div>
+            <input type="checkbox" id="1:1ratio" name="1:1ratio" onchange="arlockToggle()">
+            <label for="1:1ratio">Lock 1:1 aspect ratio</label>
+        </div>
     </div>
     <script src="main.js"></script>
 </body>
